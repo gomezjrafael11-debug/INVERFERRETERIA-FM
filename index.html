@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INVERFERRETERIA FM</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+</head>
+
+<body>
+
+    <div class="menu-overlay" id="menu-overlay"></div>
+
+    <header class="header">
+        <a href="index.html"><img src="logo.png.png" alt="Logo de INVERFERRETERIA FM" class="header-logo"></a>
+        <span class="header-title">INVERFERRETERIA FM</span>
+        <nav class="main-nav" id="main-nav">
+            <div class="nav-header">
+                <img src="logo.png.png" alt="INVERFERRETERIA FM" class="nav-logo-mobile">
+                <i class="fas fa-times" id="close-menu"></i>
+            </div>
+            <ul>
+                <li><a href="index.html" class="active">Inicio</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <li><a href="servicios.html">Servicios</a></li>
+                <li><a href="sobre-nosotros.html">Sobre Nosotros</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="hero-section" id="inicio">
+            <div class="hero-overlay"></div>
+            <div class="hero-content fade-in">
+                <h1>Herramientas y Materiales de Ferretería<br>para tus Grandes Proyectos</h1>
+                <p class="hero-price">tu mejor aliado</p>
+                <hr class="hero-divider">
+                <p class="hero-description">Encuentra todo lo que necesitas con la mejor calidad y asesoría. Somos tu
+                    aliado confiable en cada tarea.</p>
+                <a href="productos.html" class="hero-button">Descubre nuestros productos</a>
+            </div>
+        </section>
+
+        <!-- Resumen de servicios / características -->
+        <!-- "Por qué elegirnos" Expandido -->
+        <section class="why-us-section">
+            <h2 class="reveal-on-scroll">¿Por qué elegir INVERFERRETERIA FM?</h2>
+            <p class="reveal-on-scroll" style="max-width: 700px; margin: 0 auto; color: #666;">
+                Nos diferenciamos por ofrecer una experiencia de compra integral, donde la calidad y el servicio se
+                unen.
+            </p>
+
+            <div class="why-us-grid reveal-on-scroll staggered-parent">
+                <!-- Tarjeta 1 -->
+                <div class="why-us-card">
+                    <i class="fas fa-cubes"></i>
+                    <h3>Stock Permanente</h3>
+                    <p>Contamos con un inventario robusto para asegurar que encuentres todo lo que tu obra necesita, sin
+                        esperas.</p>
+                </div>
+
+                <!-- Tarjeta 2 -->
+                <div class="why-us-card">
+                    <i class="fas fa-tags"></i>
+                    <h3>Precios Competitivos</h3>
+                    <p>Mantenemos una excelente relación calidad-precio, trabajando directamente con proveedores
+                        confiables.</p>
+                </div>
+
+                <!-- Tarjeta 3 -->
+                <div class="why-us-card">
+                    <i class="fas fa-truck-loading"></i>
+                    <h3>Despacho Rápido</h3>
+                    <p>Logística eficiente para llevar tus materiales a la obra en el menor tiempo posible y con total
+                        seguridad.</p>
+                </div>
+
+                <!-- Tarjeta 4 -->
+                <div class="why-us-card">
+                    <i class="fas fa-user-check"></i>
+                    <h3>Asesoría Experta</h3>
+                    <p>Nuestro equipo no solo vende, te orienta técnicamente para que tomes la mejor decisión de compra.
+                    </p>
+                </div>
+
+                <!-- Tarjeta 5 -->
+                <div class="why-us-card">
+                    <i class="fas fa-map-marked-alt"></i>
+                    <h3>Ubicación Estratégica</h3>
+                    <p>Fácil acceso en la Carretera Nacional Güigüe - Maracay, ideal para cargas rápidas y sencillas.
+                    </p>
+                </div>
+
+                <!-- Tarjeta 6 -->
+                <div class="why-us-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Confianza y Garantía</h3>
+                    <p>Años de trayectoria y cientos de clientes satisfechos respaldan nuestro compromiso con la
+                        calidad.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 4rem;">
+                <a href="servicios.html" class="hero-button">Ver todos nuestros servicios</a>
+            </div>
+        </section>
+
+        <!-- Llamado a la acción para productos -->
+        <section style="padding: 4rem 2rem; text-align: center; background-color: var(--white);">
+            <h2 class="reveal-on-scroll">Explora nuestro Catálogo</h2>
+            <p style="max-width: 600px; margin: 0 auto 2rem auto;">Tenemos desde materiales de construcción hasta las
+                herramientas más especializadas.</p>
+            <a href="productos.html" class="hero-button">Ver Productos</a>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-contact-grid">
+            <div class="contact-info reveal-on-scroll">
+                <h4>¡Contáctanos!</h4>
+                <p>Teléfono: <a href="tel:+584244362082">+58 424-4362082</a></p>
+                <p>Dirección: Carretera Nacional Güigüe - Maracay, Sector Panecito, Carabobo</p>
+                <div class="social-media">
+                    <a href="https://www.instagram.com/inverferreteria_fm" class="social-link" target="_blank"
+                        aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://www.facebook.com/" class="social-link" target="_blank" aria-label="Facebook"><i
+                            class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+            <div class="footer-map reveal-on-scroll">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3928.1881349042587!2d-67.77382722549068!3d10.083665671590516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8e806d7587cde5e7%3A0x780ab466abb26004!2sINVERFERRETERIA%20F.M!5e0!3m2!1ses-419!2sve!4v1758728843251!5m2!1ses-419!2sve"
+                    width="100%" height="250" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 INVERFERRETERIA FM. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

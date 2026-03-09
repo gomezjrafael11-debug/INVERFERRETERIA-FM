@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicios - INVERFERRETERIA FM</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+</head>
+
+<body>
+
+    <div class="menu-overlay" id="menu-overlay"></div>
+
+    <header class="header">
+        <a href="index.html"><img src="logo.png.png" alt="Logo de INVERFERRETERIA FM" class="header-logo"></a>
+        <span class="header-title">INVERFERRETERIA FM</span>
+        <nav class="main-nav" id="main-nav">
+            <div class="nav-header">
+                <img src="logo.png.png" alt="INVERFERRETERIA FM" class="nav-logo-mobile">
+                <i class="fas fa-times" id="close-menu"></i>
+            </div>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="productos.html">Productos</a></li>
+                <li><a href="servicios.html" class="active">Servicios</a></li>
+                <li><a href="sobre-nosotros.html">Sobre Nosotros</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle" id="mobile-menu">
+            <i class="fas fa-bars"></i>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <h2 style="margin-top: 2rem;">Nuestros Servicios Profesionales</h2>
+        <p style="text-align: center; max-width: 700px; margin: 0 auto 3rem auto;">
+            En INVERFERRETERIA FM no solo vendemos productos, ofrecemos soluciones integrales para tus proyectos de
+            construcción.
+        </p>
+
+        <!-- Catálogo Zig-Zag -->
+        <section class="service-zigzag">
+            <!-- Servicio 1 -->
+            <div class="service-item reveal-on-scroll">
+                <div class="service-img-wrapper">
+                    <img src="asesoria.jpg" alt="Asesoría Técnica">
+                </div>
+                <div class="service-info">
+                    <h3>Asesoría Técnica Especializada</h3>
+                    <p>No estás seguro de qué material usar? Nuestro equipo de ingenieros y expertos en construcción te
+                        guiarán paso a paso para optimizar tu presupuesto y garantizar la calidad de tu obra.</p>
+                    <a href="contacto.html" class="hero-button"
+                        style="padding: 0.5rem 1.5rem; font-size: 0.9rem;">Consultar Ahora</a>
+                </div>
+            </div>
+
+            <!-- Servicio 2 -->
+            <div class="service-item reveal-on-scroll">
+                <div class="service-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=600"
+                        alt="Despacho a Obra">
+                </div>
+                <div class="service-info">
+                    <h3>Logística y Despacho a Obra</h3>
+                    <p>Olvídate del transporte. Contamos con flota propia para llevar desde un saco de cemento hasta
+                        camiones de bloques directamente a tu construcción, con puntualidad garantizada.</p>
+                </div>
+            </div>
+
+            <!-- Servicio 3 -->
+            <div class="service-item reveal-on-scroll">
+                <div class="service-img-wrapper">
+                    <img src="https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&q=80&w=600"
+                        alt="Corte a Medida">
+                </div>
+                <div class="service-info">
+                    <h3>Corte y Dimensionado de Materiales</h3>
+                    <p>Ofrecemos servicio de corte para madera, tubos y perfiles metálicos según tus especificaciones
+                        exactas, ahorrándote tiempo y esfuerzo en el sitio de trabajo.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section reveal-on-scroll">
+            <h2>Preguntas Frecuentes</h2>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    ¿Cuáles son los métodos de pago?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Aceptamos transferencias bancarias nacionales, pago móvil, efectivo en divisas y Zelle. Para
+                        clientes corporativos, ofrecemos opciones de crédito previo estudio.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    ¿Hacen envíos a nivel nacional?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Sí, realizamos envíos a todo el país a través de alianzas con empresas de encomiendas confiables.
+                        Para la zona central, usamos transporte propio.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    ¿Tienen garantía los productos eléctricos?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>Todos nuestros productos eléctricos y herramientas cuentan con la garantía de fábrica, que varía
+                        según la marca (generalmente entre 6 meses y 1 año).</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-bottom">
+            <p>© 2025 INVERFERRETERIA FM. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

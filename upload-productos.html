@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Carga Masiva — INVERFERRETERIA FM</title>
+    <style>
+        body { font-family: monospace; background: #111; color: #0f0; padding: 2rem; }
+        h1   { color: #ff6b00; font-family: sans-serif; }
+        #log { white-space: pre-wrap; line-height: 1.8; }
+        .ok  { color: #25d366; }
+        .err { color: #ff4d4d; }
+        .done { color: #ff6b00; font-size: 1.3rem; font-weight: bold; }
+        button { margin-top: 1.5rem; padding: 0.8rem 2rem; background: #ff6b00;
+                 color: #fff; border: none; border-radius: 8px; font-size: 1rem;
+                 cursor: pointer; }
+        button:disabled { background: #555; cursor: not-allowed; }
+    </style>
+</head>
+<body>
+    <h1>🔥 Cargar 50 productos a Firebase Firestore</h1>
+    <p style="color:#aaa">Haz clic en el botón para subir todos los productos de una sola vez.</p>
+    <button id="uploadBtn" onclick="subirProductos()">⬆️ Subir 50 productos</button>
+    <div id="log"></div>
+
+<script type="module">
+import { initializeApp }                          from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey:            "AIzaSyBEVqWvU6g6QwwboiWkjMWrwtdgRm0cG_w",
+    authDomain:        "inverferreteria-48181.firebaseapp.com",
+    projectId:         "inverferreteria-48181",
+    storageBucket:     "inverferreteria-48181.firebasestorage.app",
+    messagingSenderId: "355994579495",
+    appId:             "1:355994579495:web:709e52df9a0bd6a5fe1402"
+};
+
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+const productos = [
+    { id:"p1",  cat:"herramientas", name:"Cinta Métrica Profesional 5m",            price:12.50, img:"cinta.png",           desc:"Precisa y duradera, ideal para albañilería, metal y carpintería.", stock:50 },
+    { id:"p2",  cat:"construccion", name:"Arena Cernida x Saco",                    price:5.00,  img:"image.png",            desc:"Alta calidad, libre de piedras, para acabados finos y frisos.", stock:200 },
+    { id:"p3",  cat:"construccion", name:"Cemento Portland (Paca)",                 price:8.00,  img:"cemento.png",          desc:"Resistencia garantizada, esencial para cualquier obra.", stock:150 },
+    { id:"p4",  cat:"construccion", name:"Arena Lavada x Saco",                     price:6.00,  img:"lavada.png",           desc:"Limpia y gruesa, perfecta para mezclas de concreto.", stock:180 },
+    { id:"p5",  cat:"construccion", name:"Bloque de Concreto 15x20x40",             price:1.20,  img:"bloque_cemento.png",   desc:"Resistentes y uniformes, ideales para muros de carga.", stock:500 },
+    { id:"p6",  cat:"construccion", name:"Bloque de Arcilla 15cm",                  price:0.80,  img:"bloquerojo.png",       desc:"Ligeros y térmicos, la mejor opción para tabiquería.", stock:500 },
+    { id:"p7",  cat:"construccion", name:"Tubo de Hierro 2x1",                      price:22.00, img:"tubo2x1.png",          desc:"Resistentes y versátiles para herrería y estructuras.", stock:80 },
+    { id:"p8",  cat:"plomeria",     name:"Codo PVC ½ pulgada",                      price:2.50,  img:"tubospvc.png",         desc:"Conexión duradera para sistemas de distribución de agua.", stock:100 },
+    { id:"p9",  cat:"construccion", name:"Cabilla Estriada ½\"",                    price:15.00, img:"cabilla.png",          desc:"Acero de alta tensión, fundamental para la seguridad estructural.", stock:60 },
+    { id:"p10", cat:"plomeria",     name:"Tubo Aguas Servidas 4\"",                 price:18.00, img:"4pulgadas.png",        desc:"Tubería sanitaria de alta durabilidad para desagüe.", stock:40 },
+    { id:"p11", cat:"plomeria",     name:"Manguera PVC Reforzada 15m",              price:25.00, img:"mangueras.png",        desc:"Flexible y resistente, ideal para riego y jardín.", stock:30 },
+    { id:"p12", cat:"herramientas", name:"Taladro Percutor Industrial 800W",        price:85.00, img:"taladro.png",          desc:"Potente para perforación en concreto y acero pesado.", stock:15 },
+    { id:"p13", cat:"herramientas", name:"Kit de Herramientas Manuales 120pzas",    price:45.00, img:"kit_herramientas.png", desc:"Set indispensable para cualquier reparación del hogar.", stock:20 },
+    { id:"p14", cat:"pinturas",     name:"Pintura Caucho Blanco (Galón)",            price:25.00, img:"pintura_galon.png",    desc:"Excelente cubrimiento y acabado mate interior/exterior.", stock:45 },
+    { id:"p15", cat:"herramientas", name:"Carretilla Metálica Reforzada",            price:55.00, img:"carretilla.png",       desc:"Diseño robusto para cargar arena, piedra y cemento.", stock:10 },
+    { id:"p16", cat:"herramientas", name:"Juego de Destornilladores (8 pzas)",       price:15.50, img:"kit_herramientas.png", desc:"Puntas magnéticas y mangos ergonómicos aislados.", stock:35 },
+    { id:"p17", cat:"plomeria",     name:"Tee Reductora PVC ¾\" a ½\"",             price:1.50,  img:"tubospvc.png",         desc:"Conexión en T resistente para derivaciones seguras.", stock:80 },
+    { id:"p18", cat:"herramientas", name:"Martillo de Galponero 16oz",               price:12.00, img:"kit_herramientas.png", desc:"Mango hickory para absorción de impactos, acero forjado.", stock:25 },
+    { id:"p19", cat:"pinturas",     name:"Rodillo Profesional 9\" para Pintura",    price:8.50,  img:"pintura_galon.png",    desc:"Ideal para látex y acrílicos. Sin pelusas, acabado perfecto.", stock:40 },
+    { id:"p20", cat:"herramientas", name:"Esmeril Angular 4½\"",                    price:65.00, img:"taladro.png",          desc:"Alta velocidad para cortes rápidos de metales y mampostería.", stock:12 },
+    { id:"p21", cat:"herramientas", name:"Disco de Corte Metal 4½\"",               price:2.20,  img:"taladro.png",          desc:"Alta resistencia al desgaste, cortes precisos sin rebabas.", stock:100 },
+    { id:"p22", cat:"construccion", name:"Pala Cuadrada Reforzada",                  price:18.00, img:"carretilla.png",       desc:"Hoja de acero templado, mango fibra de vidrio resistente.", stock:20 },
+    { id:"p23", cat:"construccion", name:"Cemento Blanco 1 Kg",                      price:3.50,  img:"cemento.png",          desc:"Ideal para empastados finos y juntas cerámicas.", stock:90 },
+    { id:"p24", cat:"plomeria",     name:"Teflón Industrial 3/4\"",                 price:1.00,  img:"mangueras.png",        desc:"Alta densidad para sellar roscas previniendo fugas.", stock:200 },
+    { id:"p25", cat:"pinturas",     name:"Brocha Cerdas Naturales 4\"",              price:5.00,  img:"pintura_galon.png",    desc:"Para esmaltes y barnices. Excelente retención de líquido.", stock:60 },
+    { id:"p26", cat:"herramientas", name:"Llave Ajustable 10\"",                    price:14.00, img:"kit_herramientas.png", desc:"Cromo vanadio. Ajuste preciso para tuercas de todo tipo.", stock:30 },
+    { id:"p27", cat:"pinturas",     name:"Pintura Esmalte Sintético Negro (1/4)",    price:9.00,  img:"pintura_galon.png",    desc:"Resistente a intemperie. Secado súper rápido.", stock:50 },
+    { id:"p28", cat:"plomeria",     name:"Válvula de Esfera (Paso) ½\"",            price:8.50,  img:"tubospvc.png",         desc:"Cuerpo de bronce pesado. Sellado perfecto, no oxida.", stock:35 },
+    { id:"p29", cat:"pinturas",     name:"Bandeja para Pintura Plástica",            price:4.50,  img:"pintura_galon.png",    desc:"Capacidad amplia con estrías antideslizantes.", stock:55 },
+    { id:"p30", cat:"construccion", name:"Pico Constructor con Mango",               price:22.00, img:"carretilla.png",       desc:"Pico forjado, perfecto para remover tierra dura.", stock:15 },
+    { id:"p31", cat:"herramientas", name:"Alicate de Presión (Hombre Solo)",         price:11.50, img:"kit_herramientas.png", desc:"Mordazas curvas para formas redondas y tuercas trabadas.", stock:20 },
+    { id:"p32", cat:"herramientas", name:"Serrucho para Madera 22\"",               price:17.00, img:"kit_herramientas.png", desc:"Dientes endurecidos de triple filo, cortan al empujar y jalar.", stock:18 },
+    { id:"p33", cat:"plomeria",     name:"Pega PVC Transparente 1/8",                price:6.00,  img:"tubospvc.png",         desc:"Adhesivo soldador ultra fuerte para cañerías a presión.", stock:60 },
+    { id:"p34", cat:"construccion", name:"Bloque de Ventilación 20x20",              price:1.50,  img:"bloquerojo.png",       desc:"Circulación de aire en muros sin perder seguridad.", stock:300 },
+    { id:"p35", cat:"herramientas", name:"Nivel de Aluminio 3 Celdas",               price:10.00, img:"cinta.png",            desc:"Estructura fuerte anticaídas, visualización perfecta.", stock:25 },
+    { id:"p36", cat:"construccion", name:"Alambre Dulce Recocido (Kg)",              price:4.00,  img:"cabilla.png",          desc:"Maleable para amarres de cabillas y encofrados.", stock:100 },
+    { id:"p37", cat:"herramientas", name:"Lijadora Orbital Eléctrica",               price:55.00, img:"taladro.png",          desc:"Alto rendimiento para pulir maderas y dry-wall.", stock:8 },
+    { id:"p38", cat:"pinturas",     name:"Fondo Anti-Corrosivo Gris 1 Galón",        price:28.00, img:"pintura_galon.png",    desc:"Barrera sólida contra óxido en estructuras de hierro.", stock:22 },
+    { id:"p39", cat:"herramientas", name:"Cortadora de Baldosas Manual 60cm",        price:48.00, img:"kit_herramientas.png", desc:"Corte preciso con cuchilla de carburo de tungsteno.", stock:5 },
+    { id:"p40", cat:"pinturas",     name:"Tirro de Papel Carrocero 1\"",             price:2.00,  img:"pintura_galon.png",    desc:"Protege bordes antes de pintar sin dejar residuos.", stock:80 },
+    { id:"p41", cat:"plomeria",     name:"Tapa Sifón Plástica con Rejilla",          price:3.50,  img:"4pulgadas.png",        desc:"Para duchas y drenajes de piso, resistente a pisadas.", stock:40 },
+    { id:"p42", cat:"construccion", name:"Yeso Calcinado x Kg",                      price:1.80,  img:"image.png",            desc:"Fraguado controlado para retoques finos de interior.", stock:70 },
+    { id:"p43", cat:"herramientas", name:"Tenaza para Amarre",                       price:8.00,  img:"kit_herramientas.png", desc:"Articulación ajustada para cortes finos en alambre.", stock:30 },
+    { id:"p44", cat:"construccion", name:"Grava Picada x Saco",                      price:6.50,  img:"lavada.png",           desc:"Piedra picada para vaciado en placas de piso y techo.", stock:120 },
+    { id:"p45", cat:"plomeria",     name:"Cinta Empaque Adhesiva 40m",               price:2.20,  img:"mangueras.png",        desc:"Sellado en general para todo propósito.", stock:90 },
+    { id:"p46", cat:"pinturas",     name:"Brocha Élite Angular 2\"",                 price:4.50,  img:"pintura_galon.png",    desc:"Perfil en ángulo para marcar esquinas con pulso perfecto.", stock:45 },
+    { id:"p47", cat:"herramientas", name:"Kit Mechas Metal y Concreto (18pzas)",     price:16.00, img:"taladro.png",          desc:"Cubiertas de titanio y puntas de tungsteno en estuche.", stock:20 },
+    { id:"p48", cat:"herramientas", name:"Silicón Transparente (Tubo)",              price:4.00,  img:"tubospvc.png",         desc:"Hermético antihumedad para fregaderos y bañeras.", stock:55 },
+    { id:"p49", cat:"construccion", name:"Tubo Rectangular Hierro 3x1",              price:32.00, img:"tubo2x1.png",          desc:"Base para soportar rejas pesadas de seguridad.", stock:25 },
+    { id:"p50", cat:"herramientas", name:"Casco de Seguridad Integral CE",           price:9.00,  img:"carretilla.png",       desc:"Ajuste regulable, peso ligero para larga jornada en obra.", stock:40 }
+];
+
+window.subirProductos = async function() {
+    const btn = document.getElementById('uploadBtn');
+    const log = document.getElementById('log');
+    btn.disabled = true;
+    btn.textContent = "Subiendo...";
+    log.innerHTML = '';
+
+    let ok = 0, err = 0;
+
+    for (const p of productos) {
+        try {
+            const { id, ...data } = p;
+            await setDoc(doc(db, 'productos', id), data);
+            log.innerHTML += `<span class="ok">✅ ${p.id} — ${p.name}</span>\n`;
+            ok++;
+        } catch (e) {
+            log.innerHTML += `<span class="err">❌ Error en ${p.id}: ${e.message}</span>\n`;
+            err++;
+        }
+    }
+
+    log.innerHTML += `\n<span class="done">🎉 Listo: ${ok} productos subidos, ${err} errores.</span>\n`;
+    btn.textContent = "✅ Completado";
+};
+</script>
+</body>
+</html>

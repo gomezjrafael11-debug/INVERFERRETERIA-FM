@@ -234,4 +234,195 @@ document.addEventListener('DOMContentLoaded', () => {
 
     createFloatingButtons();
 
+    // ---- Lógica del Carrito de Compras ----
+    const initCart = () => {
+        // 1. Inyectar HTML del carrito si no existe
+        if (!document.getElementById('cart-drawer')) {
+            const cartHTML = `
+                <div class="cart-overlay" id="cart-overlay"></div>
+                <div class="cart-drawer" id="cart-drawer">
+                    <div class="cart-header">
+                        <h2>Tu Carrito</h2>
+                        <i class="fas fa-times" id="close-cart-btn"></i>
+                    </div>
+                    <div class="cart-items-container" id="cart-items">
+                        <!-- Items will be injected here -->
+                    </div>
+                    <div class="cart-footer">
+                        <div class="cart-total-row">
+                            <span>Total:</span>
+                            <span id="cart-total-price">$0.00</span>
+                        </div>
+                        <button class="checkout-btn" id="checkout-btn">
+                            <i class="fab fa-whatsapp"></i> Pedir por WhatsApp
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', cartHTML);
+        }
+
+        // Variables
+        let cart = JSON.parse(localStorage.getItem('inverferreteria_cart')) || [];
+        const cartBadges = document.querySelectorAll('.cart-badge');
+        const cartDrawer = document.getElementById('cart-drawer');
+        const cartOverlay = document.getElementById('cart-overlay');
+        const closeCartBtn = document.getElementById('close-cart-btn');
+        const openCartBtns = document.querySelectorAll('.cart-icon-nav');
+        const cartItemsContainer = document.getElementById('cart-items');
+        const cartTotalPrice = document.getElementById('cart-total-price');
+        const checkoutBtn = document.getElementById('checkout-btn');
+
+        // Guardar y renderizar
+        const saveCart = () => {
+            localStorage.setItem('inverferreteria_cart', JSON.stringify(cart));
+            updateCartUI();
+        };
+
+        const toggleCart = (show) => {
+            if (show) {
+                cartDrawer.classList.add('active');
+                cartOverlay.classList.add('active');
+            } else {
+                cartDrawer.classList.remove('active');
+                cartOverlay.classList.remove('active');
+            }
+        };
+
+        const attachCartEvents = () => {
+            document.querySelectorAll('.qty-btn.plus').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.getAttribute('data-index');
+                    cart[index].qty++;
+                    saveCart();
+                });
+            });
+            document.querySelectorAll('.qty-btn.minus').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = e.target.getAttribute('data-index');
+                    if (cart[index].qty > 1) {
+                        cart[index].qty--;
+                    } else {
+                        cart.splice(index, 1);
+                    }
+                    saveCart();
+                });
+            });
+            document.querySelectorAll('.remove-item-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const target = e.target.closest('.remove-item-btn');
+                    const index = target.getAttribute('data-index');
+                    cart.splice(index, 1);
+                    saveCart();
+                });
+            });
+        };
+
+        const updateCartUI = () => {
+            // Count
+            const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+            cartBadges.forEach(badge => badge.innerText = totalItems);
+
+            // Items HTML
+            cartItemsContainer.innerHTML = '';
+            let totalPrice = 0;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p class="cart-empty-message">Tu carrito está vacío.</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    const itemTotal = item.price * item.qty;
+                    totalPrice += itemTotal;
+                    
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'cart-item';
+                    itemEl.innerHTML = `
+                        <div class="cart-item-info">
+                            <h4>${item.name}</h4>
+                            <span class="cart-item-price">$${item.price.toFixed(2)}</span>
+                        </div>
+                        <div class="cart-item-controls">
+                            <button class="qty-btn minus" data-index="${index}">-</button>
+                            <span class="cart-item-qty">${item.qty}</span>
+                            <button class="qty-btn plus" data-index="${index}">+</button>
+                            <button class="remove-item-btn" data-index="${index}"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(itemEl);
+                });
+            }
+
+            cartTotalPrice.innerText = `$${totalPrice.toFixed(2)}`;
+
+            if (cart.length === 0) {
+                checkoutBtn.classList.add('disabled');
+            } else {
+                checkoutBtn.classList.remove('disabled');
+            }
+            
+            attachCartEvents();
+        };
+
+        // Bindings de UI básicos del Carrito
+        openCartBtns.forEach(btn => btn.addEventListener('click', () => toggleCart(true)));
+        closeCartBtn.addEventListener('click', () => toggleCart(false));
+        cartOverlay.addEventListener('click', () => toggleCart(false));
+
+        // Add to cart local page bindings (GLOBAL EXPOSED)
+        window.bindCartEventsToDynamicProducts = (buttons) => {
+            buttons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const card = e.target.closest('.product-card') || e.target.closest('.pc-card');
+                    const id = card.getAttribute('data-id');
+                    const name = card.getAttribute('data-name');
+                    const price = parseFloat(card.getAttribute('data-price') || 0);
+
+                    const existingItem = cart.find(item => item.id === id);
+                    if (existingItem) {
+                        existingItem.qty++;
+                    } else {
+                        cart.push({ id, name, price, qty: 1 });
+                    }
+                    saveCart();
+                    
+                    // Visual feedback
+                    const originalText = e.target.innerText;
+                    e.target.innerText = '¡Agregado!';
+                    e.target.style.backgroundColor = '#25d366';
+                    e.target.style.color = '#fff';
+                    setTimeout(() => {
+                        e.target.innerText = originalText;
+                        e.target.style.backgroundColor = '';
+                        e.target.style.color = '';
+                    }, 1000);
+                });
+            });
+        };
+        // Bind inicial a los estáticos si los hay en index
+        window.bindCartEventsToDynamicProducts(document.querySelectorAll('.add-to-cart-btn'));
+
+        // Checkout Button
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.length === 0) return;
+            
+            let message = "Hola INVERFERRETERIA FM, me gustaría hacer el siguiente pedido:\n\n";
+            let total = 0;
+            cart.forEach(item => {
+                message += `- ${item.qty}x ${item.name} ($${item.price.toFixed(2)})\n`;
+                total += item.price * item.qty;
+            });
+            
+            message += `\n*Total estimado: $${total.toFixed(2)}*\n\n¿Podrían confirmarme disponibilidad?`;
+            
+            const whatsappNumber = "584244362082";
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            
+            window.open(whatsappURL, '_blank');
+        });
+
+        updateCartUI();
+    };
+
+    initCart();
+
 });

@@ -4,10 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Catálogo completo de materiales de construcción, herramientas y plomería en INVERFERRETERIA FM.">
     <title>Productos - INVERFERRETERIA FM</title>
+
+    <!-- Preconexiones para reducir latencia de fuentes e iconos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <!-- CSS crítico primero -->
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <!-- Fuente: display=swap evita FOIT (texto invisible mientras carga) -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap">
+
+    <!-- Font Awesome: carga en paralelo sin bloquear el render -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"></noscript>
 </head>
 
 <body>
@@ -15,11 +28,11 @@
     <div class="menu-overlay" id="menu-overlay"></div>
 
     <header class="header">
-        <a href="index.html"><img src="logo.png.png" alt="Logo de INVERFERRETERIA FM" class="header-logo"></a>
+        <a href="index.html"><img src="logo.png" alt="Logo de INVERFERRETERIA FM" class="header-logo"></a>
         <span class="header-title">INVERFERRETERIA FM</span>
         <nav class="main-nav" id="main-nav">
             <div class="nav-header">
-                <img src="logo.png.png" alt="INVERFERRETERIA FM" class="nav-logo-mobile">
+                <img src="logo.png" alt="INVERFERRETERIA FM" class="nav-logo-mobile">
                 <i class="fas fa-times" id="close-menu"></i>
             </div>
             <ul>
@@ -30,8 +43,14 @@
                 <li><a href="contacto.html">Contacto</a></li>
             </ul>
         </nav>
-        <div class="menu-toggle" id="mobile-menu">
-            <i class="fas fa-bars"></i>
+        <div class="header-actions">
+            <div class="cart-icon-nav" id="open-cart-btn" aria-label="Abrir Carrito">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-badge" id="cart-badge">0</span>
+            </div>
+            <div class="menu-toggle" id="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </div>
         </div>
     </header>
 
@@ -41,7 +60,7 @@
         <!-- Categorías Grid -->
         <div class="categories-grid reveal-on-scroll">
             <div class="category-card">
-                <img src="constuccion.jpg" alt="Materiales de Construcción">
+                <img src="construccion.jpg" alt="Materiales de Construcción">
                 <div class="category-overlay">
                     <h3>Construcción</h3>
                 </div>
@@ -66,88 +85,20 @@
             </div>
         </div>
 
-        <h2 class="reveal-on-scroll" style="margin-top: 2rem;">Nuestros Productos Destacados</h2>
-        <div class="product-slider-container">
-            <button class="slider-button prev-button"><i class="fas fa-chevron-left"></i></button>
-            <div class="product-carousel reveal-on-scroll" id="productCarousel">
-                <div class="product-card">
-                    <img src="cinta.png.png" alt="Cinta Métrica Profesional" class="product-image">
-                    <h3>Cinta Métrica Profesional</h3>
-                    <p class="product-description">Precisa y duradera, ideal para trabajos de albañilería, metal y
-                        carpintería.</p>
-                </div>
-                <div class="product-card">
-                    <img src="image.png.png" alt="Arena Cernida" class="product-image">
-                    <h3>Arena Cernida</h3>
-                    <p class="product-description">De alta calidad, libre de piedras, ideal para acabados finos y
-                        frisos.</p>
-                </div>
-                <div class="product-card">
-                    <img src="cemento.png.png" alt="Cemento de Paca" class="product-image">
-                    <h3>Cemento (Paca)</h3>
-                    <p class="product-description">Cemento de resistencia garantizada, esencial para cualquier obra de
-                        construcción.</p>
-                </div>
-                <div class="product-card">
-                    <img src="lavada.png.png" alt="Arena Lavada" class="product-image">
-                    <h3>Arena Lavada</h3>
-                    <p class="product-description">Limpia y gruesa, perfecta para mezclas de concreto de alta
-                        resistencia.</p>
-                </div>
-                <div class="product-card">
-                    <img src="bloque_cemeneto.png.png" alt="Bloque de Concreto" class="product-image">
-                    <h3>Bloque de Concreto</h3>
-                    <p class="product-description">Bloques resistentes y uniformes, ideales para muros de carga y
-                        estructuras sólidas.</p>
-                </div>
-                <div class="product-card">
-                    <img src="bloquerojo.png.png" alt="Bloque de Arcilla" class="product-image">
-                    <h3>Bloque de Arcilla</h3>
-                    <p class="product-description">Ligeros y térmicos, la mejor opción para tabiquería y divisiones
-                        internas.</p>
-                </div>
-            </div>
-            <button class="slider-button next-button"><i class="fas fa-chevron-right"></i></button>
+        <h1 class="section-title text-center reveal-on-scroll" style="margin-top: 2rem;">Nuestro Catálogo Completo</h1>
+        <p class="section-subtitle text-center reveal-on-scroll">Explora toda nuestra gama de materiales y herramientas de alta calidad.</p>
+        
+        <div class="product-filter-bar" id="filterBar">
+            <button class="filter-btn active" data-filter="all">Todos</button>
+            <button class="filter-btn" data-filter="herramientas">Herramientas</button>
+            <button class="filter-btn" data-filter="construccion">Construcción</button>
+            <button class="filter-btn" data-filter="plomeria">Plomería</button>
+            <button class="filter-btn" data-filter="pinturas">Pinturas</button>
         </div>
+        <p class="product-count-label"><span id="product-count">50 productos</span></p>
 
-        <h2 class="reveal-on-scroll">Otras Herramientas y Materiales</h2>
-        <div class="product-slider-container">
-            <button class="slider-button prev-button"><i class="fas fa-chevron-left"></i></button>
-
-            <div class="product-carousel reveal-on-scroll" id="productCarousel2">
-                <div class="product-card">
-                    <img src="tubo2x1.png.png" alt="Tubo de Hierro 2x1" class="product-image">
-                    <h3>Tubos de Hierro 2x1</h3>
-                    <p class="product-description">Resistentes y versátiles, ideales para herrería y estructuras
-                        metálicas.</p>
-                </div>
-                <div class="product-card">
-                    <img src="tubospvc.png.png" alt="Conexiones PVC" class="product-image">
-                    <h3>Conexiones PVC</h3>
-                    <p class="product-description">Duraderas y seguras para todo tipo de instalación hidráulica.
-                        ¡Calidad que se adapta!</p>
-                </div>
-
-                <div class="product-card">
-                    <img src="cabilla.png.png" alt="Cabilla" class="product-image">
-                    <h3>Cabillas (Todas las medidas)</h3>
-                    <p class="product-description">Acero de refuerzo de alta tensión, fundamental para la seguridad de
-                        tu construcción.</p>
-                </div>
-                <div class="product-card">
-                    <img src="4pulgadas.png.png" alt="Tubo Aguas Servidas 4&quot;" class="product-image">
-                    <h3>Tubos Aguas Servidas 4"</h3>
-                    <p class="product-description">Tubería sanitaria de alta durabilidad, esencial para sistemas de
-                        desagüe.</p>
-                </div>
-                <div class="product-card">
-                    <img src="mangueras.png.png" alt="Mangueras" class="product-image">
-                    <h3>Mangueras PVC</h3>
-                    <p class="product-description">Flexibles y resistentes, ideales para riego y mantenimiento de áreas
-                        verdes.</p>
-                </div>
-            </div>
-            <button class="slider-button next-button"><i class="fas fa-chevron-right"></i></button>
+        <div class="product-masonry-grid" id="main-product-grid">
+            <!-- Productos renderizados al instante por catalog.js -->
         </div>
     </main>
 
@@ -157,7 +108,11 @@
         </div>
     </footer>
 
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
     <script src="script.js"></script>
+    <script src="catalog.js"></script>
 </body>
 
 </html>

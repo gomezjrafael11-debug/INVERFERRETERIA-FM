@@ -250,8 +250,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="cart-footer">
                         <div class="cart-total-row">
-                            <span>Total:</span>
-                            <span id="cart-total-price">$0.00</span>
+                            <span class="cart-total-label">Total:</span>
+                            <div class="cart-total-amount">
+                                <span id="cart-total-price">$0.00</span>
+                                <span id="cart-total-ves">Bs. 0,00</span>
+                            </div>
                         </div>
                         <button class="checkout-btn" id="checkout-btn">
                             <i class="fab fa-whatsapp"></i> Pedir por WhatsApp
@@ -263,6 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Variables
+        const TASA_VES = 500;
         let cart = JSON.parse(localStorage.getItem('inverferreteria_cart')) || [];
         const cartBadges = document.querySelectorAll('.cart-badge');
         const cartDrawer = document.getElementById('cart-drawer');
@@ -271,6 +275,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const openCartBtns = document.querySelectorAll('.cart-icon-nav');
         const cartItemsContainer = document.getElementById('cart-items');
         const cartTotalPrice = document.getElementById('cart-total-price');
+        const cartTotalVES = document.getElementById('cart-total-ves');
         const checkoutBtn = document.getElementById('checkout-btn');
 
         // Guardar y renderizar
@@ -339,7 +344,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     itemEl.innerHTML = `
                         <div class="cart-item-info">
                             <h4>${item.name}</h4>
-                            <span class="cart-item-price">$${item.price.toFixed(2)}</span>
+                            <div class="cart-item-price">
+                                <span class="cart-item-usd">$${item.price.toFixed(2)}</span>
+                                <span class="cart-item-ves">Bs. ${(item.price * TASA_VES).toLocaleString('de-DE', {minimumFractionDigits: 2})}</span>
+                            </div>
                         </div>
                         <div class="cart-item-controls">
                             <button class="qty-btn minus" data-index="${index}">-</button>
@@ -353,6 +361,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             cartTotalPrice.innerText = `$${totalPrice.toFixed(2)}`;
+            if (cartTotalVES) {
+                cartTotalVES.innerText = `Bs. ${(totalPrice * TASA_VES).toLocaleString('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            }
 
             if (cart.length === 0) {
                 checkoutBtn.classList.add('disabled');
@@ -412,7 +423,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 total += item.price * item.qty;
             });
             
-            message += `\n*Total estimado: $${total.toFixed(2)}*\n\n¿Podrían confirmarme disponibilidad?`;
+            message += `\n*Total estimado: $${total.toFixed(2)}*\n`;
+            message += `*Total en Bolívares: Bs. ${(total * TASA_VES).toLocaleString('de-DE', {minimumFractionDigits: 2})}*\n`;
+            message += `(Tasa del día: Bs. ${TASA_VES})\n\n¿Podrían confirmarme disponibilidad?`;
             
             const whatsappNumber = "584244362082";
             const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;

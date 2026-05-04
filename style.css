@@ -1374,6 +1374,14 @@ h2::after {
     font-weight: 600;
     color: var(--medium-gray);
     font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-item-ves {
+    font-size: 0.75rem;
+    color: #999;
+    font-weight: 400;
 }
 
 .cart-item-controls {
@@ -1431,11 +1439,34 @@ h2::after {
 .cart-total-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
     margin-bottom: 1.5rem;
+    color: var(--dark-gray);
+}
+
+.cart-total-label {
     font-size: 1.3rem;
     font-weight: 700;
-    color: var(--dark-gray);
+}
+
+.cart-total-amount {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+#cart-total-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--orange);
+    line-height: 1;
+}
+
+#cart-total-ves {
+    font-size: 0.95rem;
+    color: #777;
+    font-weight: 600;
+    margin-top: 4px;
 }
 
 .checkout-btn {
@@ -1643,11 +1674,24 @@ h2::after {
     border-top: 1px solid #f2f2f2;
 }
 
-.pc-price {
+.pc-price-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.pc-price-usd {
     font-size: 1.25rem;
     font-weight: 800;
     color: var(--orange);
     letter-spacing: -0.5px;
+    line-height: 1;
+}
+
+.pc-price-ves {
+    font-size: 0.8rem;
+    color: #888;
+    font-weight: 500;
 }
 
 .pc-btn {

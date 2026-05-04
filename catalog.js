@@ -1,17 +1,14 @@
-// ============================================================
-//  CATÁLOGO INVERFERRETERIA FM — conectado a Firebase Firestore
-//  Lee los productos de la nube en tiempo real (VERSIÓN COMPAT)
-// ============================================================
 
-// ── Configuración Firebase ─────────────
+
+// Configuración Firebase 
 const firebaseConfig = {
-    apiKey:            "AIzaSyBEVqWvU6g6QwwboiWkjMWrwtdgRm0cG_w",
-    authDomain:        "inverferreteria-48181.firebaseapp.com",
-    projectId:         "inverferreteria-48181",
-    storageBucket:     "inverferreteria-48181.firebasestorage.app",
+    apiKey: "AIzaSyBEVqWvU6g6QwwboiWkjMWrwtdgRm0cG_w",
+    authDomain: "inverferreteria-48181.firebaseapp.com",
+    projectId: "inverferreteria-48181",
+    storageBucket: "inverferreteria-48181.firebasestorage.app",
     messagingSenderId: "355994579495",
-    appId:             "1:355994579495:web:709e52df9a0bd6a5fe1402",
-    measurementId:     "G-E5F5QJY7FM"
+    appId: "1:355994579495:web:709e52df9a0bd6a5fe1402",
+    measurementId: "G-E5F5QJY7FM"
 };
 
 // Inicializar Firebase (usa el objeto global 'firebase' inyectado en el HTML)
@@ -23,18 +20,18 @@ const db = firebase.firestore();
 // ── Datos de categoría (badge color) ─────────────────────────────
 const catMeta = {
     herramientas: { label: "Herramientas", color: "#ff6b00" },
-    construccion:  { label: "Construcción",  color: "#2563eb" },
-    plomeria:      { label: "Plomería",      color: "#0891b2" },
-    pinturas:      { label: "Pinturas",      color: "#7c3aed" }
+    construccion: { label: "Construcción", color: "#2563eb" },
+    plomeria: { label: "Plomería", color: "#0891b2" },
+    pinturas: { label: "Pinturas", color: "#7c3aed" }
 };
 
-// ── IntersectionObserver para lazy-load de imágenes ───────────────
+// IntersectionObserver para lazy-load de imágenes
 const imageObserver = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
         if (!entry.isIntersecting) return;
         const img = entry.target;
         img.src = img.dataset.src;
-        img.onload  = () => img.classList.add('loaded');
+        img.onload = () => img.classList.add('loaded');
         img.onerror = () => img.classList.add('loaded');
         obs.unobserve(img);
     });
@@ -46,19 +43,24 @@ function buildCard(item, index) {
 
     const card = document.createElement('article');
     card.className = 'pc-card';
-    card.dataset.id    = item.id;
-    card.dataset.name  = item.name;
+    card.dataset.id = item.id;
+    card.dataset.name = item.name;
     card.dataset.price = item.price;
-    card.dataset.cat   = item.cat;
+    card.dataset.cat = item.cat;
     card.style.animationDelay = `${Math.min(index * 0.04, 0.5)}s`;
 
     const img = document.createElement('img');
-    img.alt      = item.name;
-    img.width    = 300;
-    img.height   = 200;
+    img.alt = item.name;
+    img.width = 300;
+    img.height = 200;
     img.className = 'pc-img';
     img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
     img.dataset.src = item.img || 'image.png';
+    img.onerror = function () {
+        const color = encodeURIComponent(meta.color.replace('#', ''));
+        this.onerror = null;
+        this.src = `https://placehold.co/300x200/${color}/ffffff?text=${encodeURIComponent(item.name)}`;
+    };
     imageObserver.observe(img);
 
     const badge = document.createElement('span');
@@ -66,26 +68,26 @@ function buildCard(item, index) {
     badge.textContent = meta.label;
     badge.style.setProperty('--badge-color', meta.color);
 
-    const body   = document.createElement('div');
+    const body = document.createElement('div');
     body.className = 'pc-body';
 
     const h3 = document.createElement('h3');
-    h3.className   = 'pc-name';
+    h3.className = 'pc-name';
     h3.textContent = item.name;
 
     const desc = document.createElement('p');
-    desc.className   = 'pc-desc';
+    desc.className = 'pc-desc';
     desc.textContent = item.desc || '';
 
     const footer = document.createElement('div');
     footer.className = 'pc-footer';
 
     const price = document.createElement('span');
-    price.className   = 'pc-price';
+    price.className = 'pc-price';
     price.textContent = `$${Number(item.price).toFixed(2)}`;
 
     const btn = document.createElement('button');
-    btn.className   = 'pc-btn add-to-cart-btn';
+    btn.className = 'pc-btn add-to-cart-btn';
     btn.textContent = 'Añadir';
 
     footer.appendChild(price);
@@ -147,12 +149,24 @@ async function cargarProductos(filtro = 'all') {
             : colRef.where('cat', '==', filtro).orderBy('name');
 
         const snapshot = await q.get();
-        const lista = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        let lista = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+        // Filtrar productos duplicados por nombre
+        const nombresVistos = new Set();
+        lista = lista.filter(item => {
+            const nombreNormalizado = item.name ? item.name.trim().toLowerCase() : '';
+            if (nombresVistos.has(nombreNormalizado)) {
+                return false;
+            }
+            nombresVistos.add(nombreNormalizado);
+            return true;
+        });
+
         renderProducts(lista);
 
     } catch (error) {
         console.error('Error al cargar productos:', error);
-        
+
         let errorMessage = "⚠️ No se pudieron cargar los productos.<br><small>Intenta recargar la página.</small>";
         if (String(error).includes("index")) {
             errorMessage = "⚠️ Firebase está construyendo el índice de búsqueda (tarda 3-5 mins).<br><small>Por favor recarga en un par de minutos.</small>";
